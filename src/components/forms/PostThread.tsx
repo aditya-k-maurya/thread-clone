@@ -17,21 +17,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ThreadValidation } from "@/lib/validations/thread";
+import { createThread } from "@/lib/actions/thread.actions";
 
 // import { updateUser } from "@/lib/actions/user.actions";
-
-interface Props {
-	user: {
-		id: string;
-		objectId: string;
-		username: string;
-		name: string;
-		bio: string;
-		image: string;
-	};
-	btnTitle: string;
-}
-
 
 
 function PostThread({ userId }: { userId: string }) {
@@ -44,17 +32,21 @@ function PostThread({ userId }: { userId: string }) {
 			thread: "",
 			accountId: userId,
 		},
-  });
-  
-  const onSubmit = () => {
-    await createThread()
-  }
+	});
+
+	const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
+		await createThread({
+			text: values.thread,
+			author: userId,
+			communityId: null,
+			path: pathname,
+		});
+	};
 	return (
 		<Form {...form}>
 			<form
 				className="flex flex-col justify-start gap-10"
-        onSubmit={form.handleSubmit(onSubmit)}>
-        
+				onSubmit={form.handleSubmit(onSubmit)}>
 				<FormField
 					control={form.control}
 					name="thread"
@@ -64,19 +56,16 @@ function PostThread({ userId }: { userId: string }) {
 								Content
 							</FormLabel>
 							<FormControl className="no-focus border border-dark-4 bg-dark-3 text-light-1">
-                <Textarea
-                  rows={15}
-									{...field}
-								/>
+								<Textarea rows={15} {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
 					)}
-        />
-        
-        <Button type="submit" className="bg-primary-500">
-          Post Thread
-        </Button>
+				/>
+
+				<Button type="submit" className="bg-primary-500">
+					Post Thread
+				</Button>
 			</form>
 		</Form>
 	);
