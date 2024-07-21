@@ -1,6 +1,6 @@
 "use client";
 
-import { z } from "zod";
+import * as z from "zod";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { usePathname } from "next/navigation";
@@ -33,18 +33,26 @@ function Comment({ threadId, currentUserImg, currentUserId }: Props) {
 		resolver: zodResolver(CommentValidation),
 		defaultValues: {
 			thread: "",
+			accountId: currentUserId
 		},
 	});
 
 	const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-		await addCommentToThread(
-			threadId,
-			values.thread,
-			JSON.parse(currentUserId),
-			pathname
-		);
+		console.log("Form submitted with values:", values);
+		console.log("Starting addCommentToThread");
 
-		form.reset();
+		try {
+			await addCommentToThread(
+				threadId,
+				values.thread,
+				JSON.parse(currentUserId),
+				pathname
+			);
+			console.log("Comment added successfully");
+			form.reset();
+		} catch (error) {
+			console.error("Error adding comment:", error);
+		}
 	};
 
 	return (
