@@ -2,6 +2,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { dark } from "@clerk/themes";
+import '../globals.css'
 
 export const metadata: Metadata = {
 	title: "Auth",
@@ -21,7 +22,13 @@ export default function RootLayout({
 				appearance={{
 					baseTheme: dark,
 				}}>
-				<body className={inter.className}>{children}</body>
+				<body className={inter.className}>
+					<main className="flex flex-row">
+						<section className="main-container">
+							<div className="w-full max-w-4xl">{children}</div>
+						</section>
+					</main>
+				</body>
 			</ClerkProvider>
 		</html>
 	);

@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import * as z from "zod";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
@@ -21,8 +20,8 @@ import { createThread } from "@/lib/actions/thread.actions";
 
 // import { updateUser } from "@/lib/actions/user.actions";
 
-
 function PostThread({ userId }: { userId: string }) {
+	const router = useRouter();
 	const pathname = usePathname();
 
 	const form = useForm<z.infer<typeof ThreadValidation>>({
@@ -36,10 +35,14 @@ function PostThread({ userId }: { userId: string }) {
 	const onSubmit = async (values: z.infer<typeof ThreadValidation>) => {
 		await createThread({
 			text: values.thread,
-			author: userId,
+			author: JSON.parse(JSON.stringify(userId)),
 			communityId: null,
 			path: pathname,
 		});
+
+    form.reset()
+
+		router.push("/");
 	};
 	return (
 		<Form {...form}>

@@ -13,7 +13,6 @@ async function page() {
   
   if (!userInfo?.onboarded) redirect('/onboarding');
 
-  console.log(userInfo._id)
 	return (
 		<>
 			<h1 className="head-text">Create Thread</h1>
